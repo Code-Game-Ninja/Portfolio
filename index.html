@@ -22,6 +22,33 @@
             </ul>
         </nav>
     </section>
+    <!-- Floating Quote Button & Card -->
+    <div id="quote-wrapper" class="fixed top-6 right-6 z-50">
+        <!-- Trigger Button -->
+        <button id="quote-toggle"
+            class="block sm:hidden w-12 h-12 rounded-full overflow-hidden border-2 border-purple-600 shadow-lg">
+            <img src="https://cdna.artstation.com/p/assets/images/images/039/834/614/large/super-deform-art-club-b28eca63-4871-4eec-819d-e9c9b09bb7e5.jpg?1627064879"
+                alt="Quote" class="w-full h-full object-cover" />
+        </button>
+
+        <!-- Quote Card -->
+        <div id="quote-card"
+            class="hidden sm:block bg-gradient-to-br from-purple-900/80 to-black/90 border border-purple-600 text-white p-4 rounded-2xl shadow-lg backdrop-blur-lg w-[90vw] sm:w-80 mt-2"
+            data-aos="fade-down">
+            <div class="flex items-center gap-3 mb-3">
+                <img src="https://cdna.artstation.com/p/assets/images/images/039/834/614/large/super-deform-art-club-b28eca63-4871-4eec-819d-e9c9b09bb7e5.jpg?1627064879"
+                    alt="Anime" class="w-10 h-10 rounded-full border-2 border-purple-500 object-cover" />
+                <div>
+                    <h3 class="text-lg font-bold text-purple-300">Quote of the Day</h3>
+                    <p class="text-xs text-gray-400">powered by Anime Vibes</p>
+                </div>
+            </div>
+            <p id="quote-text" class="italic text-gray-200 text-sm sm:text-base mb-2">Loading quote...</p>
+            <p id="quote-author" class="text-right text-sm text-purple-300"></p>
+        </div>
+    </div>
+
+
 
     <div class="min-h-screen text-white p-4 sm:p-6">
 
@@ -137,12 +164,55 @@
                 </form>
             </section>
 
+
+
+
             <footer class="pt-4 border-t border-zinc-600 text-center text-xs text-zinc-400" data-aos="fade">
                 © 2025, Works Limited. All rights reserved.
             </footer>
 
         </div>
     </div>
+    <script>
+        const toggleBtn = document.getElementById('quote-toggle');
+        const quoteCard = document.getElementById('quote-card');
+        const wrapper = document.getElementById('quote-wrapper');
+
+        async function loadQuote() {
+            try {
+                const res = await fetch("https://api.api-ninjas.com/v1/quotes", {
+                    method: "GET",
+                    headers: {
+                        "X-Api-Key": "WHWn4LcL/BCfP7Zg2gWM6w==xjPQVDY73sdQFyO7",
+                    },
+                });
+                const data = await res.json();
+                const quote = data[0];
+                document.getElementById("quote-text").textContent = `"${quote.quote}"`;
+                document.getElementById("quote-author").textContent = `- ${quote.author}`;
+            } catch (error) {
+                document.getElementById("quote-text").textContent = "Couldn't fetch quote.";
+                console.error(error);
+            }
+        }
+
+        loadQuote();
+
+        // Toggle for mobile
+        toggleBtn.addEventListener('click', () => {
+            quoteCard.classList.toggle('hidden');
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target) && window.innerWidth < 640) {
+                quoteCard.classList.add('hidden');
+            }
+        });
+    </script>
+
+
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
